@@ -57,7 +57,7 @@ tableTitle: "Таблица"
 listingTitle: "Листинг"
 lofTitle: "Порядок проведения лабораторной работы"
 lotTitle: "Вывод"
-lolTitle: "Листинги"
+lolTitle: "Листинги"#
 ## Misc options
 indent: true
 header-includes:

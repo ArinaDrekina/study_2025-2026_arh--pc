@@ -1,0 +1,122 @@
+---
+## Front matter
+title: "Отчёт по лабораторной работе №4"
+subtitle: "Выполнил студент НКАбд-02-25"
+author: "Арина Андреевна Дрекина"
+
+## Generic otions
+lang: ru-RU
+toc-title: "Содержание"
+
+## Bibliography
+bibliography: bib/cite.bib
+csl: pandoc/csl/gost-r-7-0-5-2008-numeric.csl
+
+## Pdf output format
+toc: true # Table of contents
+toc-depth: 2
+lof: false # List of figures
+lot: false # List of tables
+fontsize: 12pt
+linestretch: 1.5
+papersize: a4
+documentclass: scrreprt
+## I18n polyglossia
+polyglossia-lang:
+  name: russian
+  options:
+  - spelling=modern
+  - babelshorthands=true
+polyglossia-otherlangs:
+  name: english
+## I18n babel
+babel-lang: russian
+babel-otherlangs: english
+## Fonts
+mainfont: "Liberation Serif"
+romanfont: "Liberation Serif"
+sansfont: "Liberation Sans"
+monofont: "Liberation Mono"
+mainfontoptions: Ligatures=TeX
+romanfontoptions: Ligatures=TeX
+sansfontoptions: Ligatures=TeX,Scale=MatchLowercase
+monofontoptions: Scale=MatchLowercase,Scale=0.9
+## Biblatex
+biblatex: true
+biblio-style: "gost-numeric"
+biblatexoptions:
+  - parentracker=true
+  - backend=biber
+  - hyperref=auto
+  - language=auto
+  - autolang=other*
+  - citestyle=gost-numeric
+## Pandoc-crossref LaTeX customization
+figureTitle: "Рис."
+tableTitle: "Таблица"
+listingTitle: "Листинг"
+lofTitle: "Порядок проведения лабораторной работы"
+lotTitle: "Вывод"
+lolTitle: "Листинги"#
+## Misc options
+indent: true
+header-includes:
+  - \usepackage{indentfirst}
+  - \usepackage{float} # keep figures where there are in the text
+  - \floatplacement{figure}{H} # keep figures where there are in the text
+---
+# Цель работы
+Освоение процедуры компиляции и сборки программ, написанных на ассемблере NASM.
+
+# Порядок выполнения лабораторной работы
+
+# Программа Hello world!
+Для начала я создала каталог для работы с программами на языке ассемблера NASM. После этого я зашла в созданный каталог (Рисунок 3.1)
+
+![Создание каталога для работы с программами и переход в него.](image/ris1.jpg){#fig:ris1.jpg width=0.7\textwidth}
+
+Далее я создала текстовый файл с именем hello.asm с помощью команды "touch". Я проверила создался ли файл. После этого с помощью команды "gedit" я открыла его и ввела текст, который был предоставлен в материалах к лабораторной работе(Рисунок 3.2)
+
+![Создание текстового файла hello.asm.](image/ris2.jpg){#fig:ris2.jpg width=0.7\textwidth}
+
+# Транслятор NASM
+Далее я превратила текст программы в объект кода (Рисунок 4.1)
+
+![Перевод из текста в объект кода.](image/ris3.jpg){#fig:ris3.jpg width=0.7\textwidth}
+
+После этого проверила, создался ли файл hello.o (Рисунок 4.2)
+
+![Проверка наличия файлов.](image/ris4.jpg){#fig:ris4.jpg width=0.7\textwidth}
+
+# Расширенный синтаксис командной строки NASM
+Далее я выполнила команду, которая скомпелировала исходный файл hello.asm в obj.o (Рисунок 5.1)
+
+![Компелирование файла hello.asm в obj.o.](image/ris5.jpg){#fig:ris5.jpg width=0.7\textwidth}
+
+После этого с помощью команды ls я проверила, что файлы были созданы (Рисунок 5.2)
+
+![Проверка создания файлов.](image/ris6.jpg){#fig:ris6.jpg width=0.7\textwidth}
+
+# Компоновщик LD
+Далее, чтобы получить исполняемую программу, с помощью команды "ld -m elf_i386 hello.o -o hello", я передала на обработку компоновщику объектный файл.После этого я сделала копоновку, с помощью команды "ld -m elf_i386 obj.o -o main" (Рисунок 6.1)
+
+![Компоновка объектного файла.](image/ris7.jpg){#fig:ris7.jpg width=0.7\textwidth}
+
+# Запуск исполняемого файла
+С помощью команды "./hello" я запустила созданный исполняемый файл. После этого на монитор вывелась заветная фраза "Hello world!", что означает, что процедура прошла успешно (Рисунок 7.1)
+
+![Запуск исполняемого файла, с помощью команды "./hello".](image/ris9.jpg){#fig:ris9.jpg width=0.7\textwidth}
+
+# Задание для самостоятельной работы
+Я создала копию файла hello.asm  с именем lab4.asm. После этого я внесла изменения в текст программы в файле lab4.asm, теперь вместо строки "Hello world!" будет выводится "Drekina Arina". Далее я оттранслировала полученный текст с помощью команды "nasm -f elf lab4.asm", выполнила компановку объектного файла с помощью команды "ld -m elf_i386 lab4.o -o hello"(Рисунок 8.1) и с помощью команды "./hello" запустила исполняемый файл. (Рисунок 8.2)
+
+![Транслирование текста.](image/ris10.jpg){#fig:ris10.jpg width=0.7\textwidth}
+
+![Запуск исполняемого файла.](image/ris12.jpg){#fig:ris12.jpg width=0.7\textwidth}
+
+В конце я скопировала файлы в локальный репозиторий. А после этого загрузила файлы на github.(Рисунок 8.3)
+
+![Загрузка файлов на github.](image/ris13.jpg){#fig:ris13.jpg width=0.7\textwidth}
+
+# Вывод
+В результате выполнения данной лабораторной работы я научилась компилировать и собирать программы, написанные на ассемблере NASM.
