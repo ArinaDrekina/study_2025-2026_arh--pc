@@ -1,0 +1,224 @@
+---
+## Front matter
+title: "Отчёт по лабораторной работе №5"
+subtitle: "Выполнил студент НКАбд-02-25"
+author: "Арина Андреевна Дрекина"
+
+## Generic otions
+lang: ru-RU
+toc-title: "Содержание"
+
+## Bibliography
+bibliography: bib/cite.bib
+csl: pandoc/csl/gost-r-7-0-5-2008-numeric.csl
+
+## Pdf output format
+toc: true # Table of contents
+toc-depth: 2
+lof: true # List of figures
+lot: false # List of tables
+lol: true
+fontsize: 12pt
+linestretch: 1.5
+papersize: a4
+documentclass: scrreprt
+## I18n polyglossia
+polyglossia-lang:
+  name: russian
+  options:
+  - spelling=modern
+  - babelshorthands=true
+polyglossia-otherlangs:
+  name: english
+## I18n babel
+babel-lang: russian
+babel-otherlangs: english
+## Fonts
+mainfont: "Liberation Serif"
+romanfont: "Liberation Serif"
+sansfont: "Liberation Sans"
+monofont: "Liberation Mono"
+mainfontoptions: Ligatures=TeX
+romanfontoptions: Ligatures=TeX
+sansfontoptions: Ligatures=TeX,Scale=MatchLowercase
+monofontoptions: Scale=MatchLowercase,Scale=0.9
+## Biblatex
+biblatex: true
+biblio-style: "gost-numeric"
+biblatexoptions:
+  - parentracker=true
+  - backend=biber
+  - hyperref=auto
+  - language=auto
+  - autolang=other*
+  - citestyle=gost-numeric
+## Pandoc-crossref LaTeX customization
+figureTitle: "Рис."
+tableTitle: "Таблица"
+listingTitle: "Листинг"
+lofTitle: "Порядок проведения лабораторной работы"
+lotTitle: "Вывод"
+lolTitle: "Листинги"#
+## Misc options
+indent: true
+header-includes:
+  - \usepackage{indentfirst}
+  - \usepackage{float} # keep figures where there are in the text
+  - \floatplacement{figure}{H} # keep figures where there are in the text
+---
+# Цель работы
+Приобретение практических навыков работы в Midnight Commander. Освоение инструкций языка ассемблера mov и int.
+
+# Порядок выполнения лабораторной работы
+Для начала с помощью комнады "mc" я открыла Midnight Commander.(Рисунок 2.1 и Рисунок 2.2)
+
+![Выполнение команды mc.](image/ris1.jpg){#fig:ris1.jpg width=0.7\textwidth}
+
+![Открытие Midnight Commander.](image/ris2.jpg){#fig:ris2.jpg width=0.7\textwidth}
+
+Далее с помощью нужных клавиш я перешла в каталог "~/work/arch-pc"(Рисунок 2.3)
+
+![Переход в нужный каталог для дальнейшей работы.](image/ris3.jpg){#fig:ris3.jpg width=0.7\textwidth}
+
+Далее с помощью клавиши F7 я создала папку "lab05"(Рисунок 2.4)
+
+![Создание папки "lab05".](image/ris4.jpg){#fig:ris4.jpg width=0.7\textwidth}
+
+Далее я вошла в созданную папку и с помощью команды touch создала текстовый файл "lab5-1.asm" (Рисунок 2.5)
+
+![Создание текстового файла  "lab5-1.asm".](image/ris5.jpg){#fig:ris5.jpg width=0.7\textwidth}
+
+Далее с помощью клавиши F4 я открыла созданный файл и вставила туда Листинг 5.1, который взяла из лекции.(Рисунок 2.6)
+
+![Ввод текста из Листниг 5.1 в файл.](image/ris6.jpg){#fig:ris6.jpg width=0.7\textwidth}
+
+В Листинге 5.1[@lst:lab5-11] представлена программа, реализующая ввод строки с клавиатуры и ее последующий вывод на экран.
+
+```asm {#lst:lab5-11 caption="Программа lab5-11.asm - ввод и вывод строки"}
+;------------------------------------------------------------------
+; Программа вывода сообщения на экран и ввода строки с клавиатуры
+;------------------------------------------------------------------
+;------------------- Объявление переменных ----------------
+SECTION .data ; Секция инициированных данных
+msg: DB 'Введите строку:',10 ; сообщение плюс
+; символ перевода строки
+msgLen: EQU $-msg ; Длина переменной 'msg'
+SECTION .bss ; Секция не инициированных данных
+buf1: RESB 80 ; Буфер размером 80 байт
+;------------------- Текст программы -----------------
+SECTION .text ; Код программы
+GLOBAL _start ; Начало программы
+_start: ; Точка входа в программу
+;------------ Cистемный вызов `write`
+; После вызова инструкции 'int 80h' на экран будет
+; выведено сообщение из переменной 'msg' длиной 'msgLen'
+mov eax,4 ; Системный вызов для записи (sys_write)
+mov ebx,1 ; Описатель файла 1 - стандартный вывод
+mov ecx,msg ; Адрес строки 'msg' в 'ecx'
+mov edx,msgLen ; Размер строки 'msg' в 'edx'
+int 80h ; Вызов ядра
+;------------ системный вызов `read` ----------------------
+; После вызова инструкции 'int 80h' программа будет ожидать ввода
+; строки, которая будет записана в переменную 'buf1' размером 80 байт
+mov eax, 3 ; Системный вызов для чтения (sys_read)
+mov ebx, 0 ; Дескриптор файла 0 - стандартный ввод
+mov ecx, buf1 ; Адрес буфера под вводимую строку
+mov edx, 80 ; Длина вводимой строки
+int 80h ; Вызов ядра
+;------------ Системный вызов `exit` ----------------------
+; После вызова инструкции 'int 80h' программа завершит работу
+mov eax,1 ; Системный вызов для выхода (sys_exit)
+mov ebx,0 ; Выход с кодом возврата 0 (без ошибок)
+int 80h ; Вызов ядра
+```
+
+После этого с помощью клавиши F2 я сохранила изменения и после этого закрыла файл с помощью клавиши F10. (Рисунок 2.7)
+
+![Сохранение изменений в файле.](image/ris7.jpg){#fig:ris7.jpg width=0.7\textwidth}
+
+Далее я заново открыла файл и убедилась, что данные сохранились. (Рисунок 2.8)
+
+![Повторное открытие файла и проверка изменений.](image/ris8.jpg){#fig:ris8.jpg width=0.7\textwidth}
+
+Далее я оттранслировала текст программы в объектный файл, выполнила компановку и запустила исполняемый файл.(Рисунок 2.9)
+
+![Транслирование текста, выполнение компановки и запуск исполняемого файла.](image/ris9.jpg){#fig:ris9.jpg width=0.7\textwidth}
+
+# Подключение внешнего файла in_out.asm
+Для начала я скачала файл из туис. После этого в левой панели я открыла каталог с файлом lab5-1.asm, а в правой панели я открыла каталог со скаченным файлом. (Рисунок 3.1)
+
+![Открытие левой и правой панели.](image/ris10.jpg){#fig:ris10.jpg width=0.7\textwidth}
+
+После этого я скопировала файл in_out.asm и переместила в каталог lab05 (Рисунок 3.2)
+
+![Перемещение файла в каталог lab05.](image/ris11.jpg){#fig:ris11.jpg width=0.7\textwidth}
+
+После этого я убедилась, что файл появился в каталоге lab05 (Рисунок 3.3)
+
+![Проверка наличия файла в каталоге lab05.](image/ris12.jpg){#fig:ris12.jpg width=0.7\textwidth}
+
+Далее я создала копию файла lab5-1.asm и назвала его "lab5-2.asm". (Рисунок 3.4)
+
+![Создание копии файла lab5-1.asm.](image/ris13.jpg){#fig:ris13.jpg width=0.7\textwidth}
+
+Потом я заменила текст и вставила туда текст из Листинга 5.2. (Рисунок 3.5)
+
+![Изменение текста файла.](image/ris14.jpg){#fig:ris14.jpg width=0.7\textwidth}
+
+В листнига 5.2 [@lst:lab5-12] представлена программа, реализующая ввод строки с клавиатуры и ее последующий вывод на экран.
+
+```asm {#lst:lab5-12 caption="Программа lab5-12.asm - ввод и вывод строки"}
+;--------------------------------------------------------------------
+; Программа вывода сообщения на экран и ввода строки с клавиатуры
+;---------------------------------------------------------------------
+%include 'in_out.asm' ; подключение внешнего файла
+SECTION .data ; Секция инициированных данных
+msg: DB 'Введите строку: ',0h ; сообщение
+SECTION .bss ; Секция не инициированных данных
+buf1: RESB 80 ; Буфер размером 80 байт
+SECTION .text ; Код программы
+GLOBAL _start ; Начало программы
+_start: ; Точка входа в программу
+mov eax, msg ; запись адреса выводимого сообщения в `EAX`
+call sprintLF ; вызов подпрограммы печати сообщения
+mov ecx, buf1 ; запись адреса переменной в `EAX`
+mov edx, 80 ; запись длины вводимого сообщения в `EBX`
+call sread ; вызов подпрограммы ввода сообщения
+call quit ; вызов подпрограммы завершения
+```
+
+Затем я создала исполняемый файл и проверила его работу.(Рисунок 3.6)
+
+![Создание исполняемого файла и проверка его работы.](image/ris15.jpg){#fig:ris15.jpg width=0.7\textwidth}
+
+Далее в этом же файле я заменила подпрограмму sprintLF на sprint. И проверила, что изменится при выводе. (Рисунок 3.7)
+
+![Проверка вывода.](image/ris16.jpg){#fig:ris16.jpg width=0.7\textwidth}
+
+Разница между выводами очевидна: первый просит ввод со следующий строки, а второй просит ввод с той же строки.
+
+# Задание для самостоятельной работы
+
+После этого я создала копию файла lab5-1.asm и назвала новый файл "lab5-1-2.asm". Затем внесла изменения в программу, так чтобы она работала по сказанному алгоритму. (Рисунок 4.1)
+
+![Измененный текст.](image/ris17.jpg){#fig:ris17.jpg width=0.7\textwidth}
+
+Далее я сделала lab5-1-2.asm исполняемым и проверила его работу. (Рисунок 4.2)
+
+![Проверка работы программы.](image/ris18.jpg){#fig:ris18.jpg width=0.7\textwidth}
+
+После этого я создала копию файла lab5-2.asm и назвала его lab5-2-2.asm. (Рисунок 4.3)
+
+![Создание копии с названием lab5-2-2.asm.](image/ris19.jpg){#fig:ris19.jpg width=0.7\textwidth}
+
+Потом внесла изменения чтобы программа выводила введенную строку на экран (Рисунок 4.4)
+
+![Измененный текст.](image/ris20.jpg){#fig:ris20.jpg width=0.7\textwidth}
+
+Затем я сделала файл исполняемым и проверила его работу. (Рисунок 4.5)
+
+![Транслирование файла, и проверка работы программы.](image/ris21.jpg){#fig:ris21.jpg width=0.7\textwidth}
+
+# Вывод
+В ходе выполнения лабораторной работы я приобрела практические навыки работы в Midnight Commander. И освоила инструкцию языка ассемблера mov и int.
+
