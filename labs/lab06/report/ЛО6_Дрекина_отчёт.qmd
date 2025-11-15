@@ -1,0 +1,376 @@
+---
+## Front matter
+title: "Отчёт по лабораторной работе №6"
+subtitle: "Выполнил студент НКАбд-02-25"
+author: "Арина Андреевна Дрекина"
+
+## Generic otions
+lang: ru-RU
+toc-title: "Содержание"
+
+## Bibliography
+bibliography: bib/cite.bib
+csl: pandoc/csl/gost-r-7-0-5-2008-numeric.csl
+
+## Pdf output format
+toc: true # Table of contents
+toc-depth: 2
+lof: false # List of figures
+lot: false # List of tables
+fontsize: 12pt
+linestretch: 1.5
+papersize: a4
+documentclass: scrreprt
+## I18n polyglossia
+polyglossia-lang:
+  name: russian
+  options:
+  - spelling=modern
+  - babelshorthands=true
+polyglossia-otherlangs:
+  name: english
+## I18n babel
+babel-lang: russian
+babel-otherlangs: english
+## Fonts
+mainfont: "Liberation Serif"
+romanfont: "Liberation Serif"
+sansfont: "Liberation Sans"
+monofont: "Liberation Mono"
+mainfontoptions: Ligatures=TeX
+romanfontoptions: Ligatures=TeX
+sansfontoptions: Ligatures=TeX,Scale=MatchLowercase
+monofontoptions: Scale=MatchLowercase,Scale=0.9
+## Biblatex
+biblatex: true
+biblio-style: "gost-numeric"
+biblatexoptions:
+  - parentracker=true
+  - backend=biber
+  - hyperref=auto
+  - language=auto
+  - autolang=other*
+  - citestyle=gost-numeric
+## Pandoc-crossref LaTeX customization
+figureTitle: "Рис."
+tableTitle: "Таблица"
+listingTitle: "Листинг"
+lofTitle: "Порядок проведения лабораторной работы"
+lotTitle: "Вывод"
+lolTitle: "Листинги"#
+## Misc options
+indent: true
+header-includes:
+  - \usepackage{indentfirst}
+  - \usepackage{float} # keep figures where there are in the text
+  - \floatplacement{figure}{H} # keep figures where there are in the text
+---
+# Цель работы
+Освоение арифметических инструкций языка ассемблера NASM.
+
+# Порядок выполнения лабораторной работы
+
+# Символьные и численные данные в NASM
+
+Сначала я создала каталог для программ лабораторной работы №6, а после перешла в него. (Рисунок 3.1 и Рисунок 3.2)
+
+![Создание каталога для лаборатороной работы.](image/ris1.jpg){#fig:ris1.jpg width=0.7\textwidth}
+
+![Переход в созданный каталог.](image/ris2.jpg){#fig:ris2.jpg width=0.7\textwidth}
+
+После этого я создала текстовый файл "lab6-1.asm" (Рисунок 3.3)
+
+![Создание текстового файла.](image/ris3.jpg){#fig:ris3.jpg width=0.7\textwidth}
+
+Затем я ввела текст из Листинга 6.1 (Рисунок 3.4)
+
+![ВВод текста из Листинга 6.1.](image/ris4.jpg){#fig:ris4.jpg width=0.7\textwidth}
+
+Листинг 6.1: 
+
+```nasm
+%include 'in_out.asm'
+SECTION .bss
+buf1: RESB 80
+SECTION .text
+GLOBAL _start
+_start:
+mov eax,'6'
+mov ebx,'4'
+add eax,ebx
+mov [buf1],eax
+mov eax,buf1
+call sprintLF
+call quit
+```
+
+Далее я сделала полученный файл исполняемым, а перед тем как запустить его, в папку lab06 я поместила копию файла "in_out.asm". (Рисунок 3.5)
+
+![Создание исполняемого файла и его запуск.](image/ris5.jpg){#fig:ris5.jpg width=0.7\textwidth}
+
+Можно заметить, что программа вывела не число 10, а букву j, все потому что код символа 6 равен 00110110 в двоичном представлении, а код символа 4 - 00110100. Команда "add eax,abx" запишет в регистр eax сумму кодов - 01101010, что является кодом символа j.
+
+Далее я изменила текст программы: вместо символов записала регистры чисел.(Рисунок 3.6)
+
+![Измененный текст программы. ](image/ris6.jpg){#fig:ris6.jpg width=0.7\textwidth}
+
+Затем я сделала этот файл исполняемым и запустила его. (Рисунок 3.7)
+
+![Создание исполняемого файла и его заупск.](image/ris7.jpg){#fig:ris7.jpg width=0.7\textwidth}
+
+Можно заметить, что число 10 мы так и не получили, однако теперь нам не вывелась и буква j, символ при выводе на экран не отображается.
+
+После этого я создала еще один файл "lab6-2.asm". (Рисунок 3.8)
+
+![Создание нового текстового файла.](image/ris8.jpg){#fig:ris8.jpg width=0.7\textwidth}
+
+Затем в созданный файл я написла текст из Листинга 6.2. (Рисунок 3.9)
+
+![Добавление текста в созданный файл.](image/ris9.jpg){#fig:ris9.jpg width=0.7\textwidth}
+
+Листинг 6.2: 
+
+```nasm
+%include 'in_out.asm'
+SECTION .text
+GLOBAL _start
+_start:
+mov eax,'6'
+mov ebx,'4'
+add eax,ebx
+call iprintLF
+call quit
+```
+
+Далее я создала исполняемый файл и запустила его. (Рисунок 3.10)
+
+![Создание исполняемого файла и его запуск.](image/ris10.jpg){#fig:ris10.jpg width=0.7\textwidth}
+
+Теперь вывелось число 106. В это случае команда add складывает коды символов '6' и '4'. Однако, в отличие от первой проограммы, функция iprintLF позволяет вывести число, а не символ, кодом которого является число.
+
+В этой программе я тоже изменила символы на числа. (Рисунок 3.11)
+
+![Изменения в тексте программы.](image/ris11.jpg){#fig:ris11.jpg width=0.7\textwidth}
+
+Далее я сделала файл исполняемым и запустила его. (Рисунок 3.12)
+
+![Создание исполняемого файла и его запуск.](image/ris12.jpg){#fig:ris12.jpg width=0.7\textwidth}
+
+После изменений программы вывелось число 10, к которому мы шли с самого начала.
+Далее я поменяла iprintLF на iprint. (Рисунок 3.13)
+
+![Замена iprintLF на iprint.](image/ris13.jpg){#fig:ris13.jpg width=0.7\textwidth}
+
+Затем сделала исполняемый файл и запустила программу. (Рисунок 3.14)
+
+![Создание исполняемого файла и запуск.](image/ris14.jpg){#fig:ris14.jpg width=0.7\textwidth}
+
+Отличие заключается в том, что в iprintLF курсор переходит на новую строку, а вот в iprint курсор остается на этой же строке.
+
+# Выполнение арифметических операций в NASM.
+
+Я создала файл lab3-asm, для программы, которая будет выполнять арифметические операции в NASM. (Рисунок 4.1)
+
+![Создание файла для дальнейшей работы.](image/ris15.jpg){#fig:ris15.jpg width=0.7\textwidth}
+
+Далее я изучила текст Листинга 6.3 и ввела его в lab6-3.asm. (Рисунок 4.2)
+
+![Ввод текста программы. ](image/ris16.jpg){#fig:ris16.jpg width=0.7\textwidth}
+
+Листинг 6.3:
+
+``` nasm
+;--------------------------------
+; Программа вычисления выражения
+;--------------------------------
+%include 'in_out.asm' ; подключение внешнего файла
+SECTION .data
+div: DB 'Результат: ',0
+rem: DB 'Остаток от деления: ',0
+SECTION .text
+GLOBAL _start
+_start:
+; ---- Вычисление выражения
+mov eax,5 ; EAX=5
+mov ebx,2 ; EBX=2
+mul ebx ; EAX=EAX*EBX
+add eax,3 ; EAX=EAX+3
+xor edx,edx ; обнуляем EDX для корректной работы div
+mov ebx,3 ; EBX=3
+div ebx ; EAX=EAX/3, EDX=остаток от деления
+mov edi,eax ; запись результата вычисления в 'edi'
+; ---- Вывод результата на экран
+mov eax,div ; вызов подпрограммы печати
+call sprint ; сообщения 'Результат: '
+mov eax,edi ; вызов подпрограммы печати значения
+call iprintLF ; из 'edi' в виде символов
+mov eax,rem ; вызов подпрограммы печати
+call sprint ; сообщения 'Остаток от деления: '
+mov eax,edx ; вызов подпрограммы печати значения
+call iprintLF ; из 'edx' (остаток) в виде символов
+call quit ; вызов подпрограммы завершения
+```
+
+Затем я сделала исполняемый файл и запустила его. (Рисунок 4.3)
+
+![Создание исполняемого файла и запуск.](image/ris17.jpg){#fig:ris17.jpg width=0.7\textwidth}
+
+После запуска на экран вывелся - "Результат: 4", а на следующей строке - "Остаток от деления: 1". Что совпадает с выводом из лекции, значим все сделано  правильно.
+
+Далее я изменила текст программы: теперь у меня вычисляется выражение f(x) = (4*6+2)/5, а не f(x) = (5*2+3)/3. (Рисунок 4.4)
+
+![Изменения в тексте программы. ](image/ris18.jpg){#fig:ris18.jpg width=0.7\textwidth}
+
+После того как я изменила текст я создала исполняемый файл и запустила его. (Рисунок 4.5) 
+
+![Исполняемый файл и запуск программы.](image/ris19.jpg){#fig:ris19.jpg width=0.7\textwidth}
+
+В терминале вывелось - "Результат: 5", а на следующей строке - "Остаток от деления: 1". Я проверила на калькуляторе, ответ у меня получился такой же, значит я сделала все правильно. 
+
+Теперь сделаем еще один пример, программа будет вычислять вариант задания по номеру студенческого билета. В самом начале программа будет запрашивать на ввод номер студенческого билета, затем будет вычислять по формуле (Sn mod 20) + 1, где Sn – номер студенческого билета (В данном случае a mod b – это остаток от деления a на b), а после выводить результат. 
+
+Я создала еще один текстовый файл с названием "variant.asm". (Рисунок 4.6)
+
+![Создание текстового файла variant.asm.](image/ris20.jpg){#fig:ris20.jpg width=0.7\textwidth}
+
+В созданный текстовый файл я добавила текст программы из Листинга 6.4, но перед этим внимательного его изучила. (Рисунок 4.7)
+
+![Перенос текста программы в файл variant.asm.](image/ris21.jpg){#fig:ris21.jpg width=0.7\textwidth}
+
+Листинг 6.4:
+
+```nasm
+;--------------------------------
+; Программа вычисления варианта
+;--------------------------------
+%include 'in_out.asm'
+SECTION .data
+msg: DB 'Введите № студенческого билета: ',0
+rem: DB 'Ваш вариант: ',0
+SECTION .bss
+x: RESB 80
+SECTION .text
+GLOBAL _start
+_start:
+mov eax, msg
+call sprintLF
+mov ecx, x
+mov edx, 80
+call sread
+mov eax,x ; вызов подпрограммы преобразования
+call atoi ; ASCII кода в число, `eax=x`
+xor edx,edx
+mov ebx,20
+div ebx
+inc edx
+mov eax,rem
+call sprint
+mov eax,edx
+call iprintLF
+call quit
+```
+
+Затем я создала исполняемый файл и запустила его. (Рисунок 4.8)
+
+![Создание исполняемого файла и его запуск.](image/ris22.jpg){#fig:ris22.jpg width=0.7\textwidth}
+
+В качестве вводных данных я ввела свой студенческий билет, мне вывелся результат "9". Я проверила вручную,  нашла остаток деления своего студенческого билета на 20 - это 8, а после прибавила 1, получилось 9. Это означает, что программа корректна. 
+
+1.В Листинге 6.4 за вывод на экран сообщения "Ваш вариант:" отвечают строки:
+
+```nasm
+mov eax,rem
+call sprint
+```
+2.Инструкции 
+
+```nasm
+mov ecx, x
+mov edx, 80
+call sread
+``` 
+
+Эти строки используются для ввода студенческого билета, а затем введенные данные сохраняются в переменную x. 
+
+3.Строка  “call atoi” используется для преобразований строки в число.
+
+4. Строки 
+
+``` nasm
+xor edx,edx
+mov ebx,20
+div ebx
+inc edx
+```
+
+отвечают за вычисление варианта.
+
+5. Остаток от деления при выполнении инструкции "dix ebx" записывается в регистр "EDX" .
+
+6. Инструкция  “inc edx” используется для увеличения значения в регистре EDX на 1.
+
+7. Строки, отвечающие за вывод на экран результата вычислений:
+
+``` nasm
+mov eax,rem
+call sprint
+mov eax,edx
+call iprintLF
+```
+
+# Задание для самостоятельной работы.
+
+Я создала еще один текстовый файл, для самостоятельной работы и назвала его "lab6-dz.asm". (Рисунок 5.1)
+
+![Создание нового файла.](image/ris23.jpg){#fig:ris23.jpg width=0.7\textwidth}
+
+Затем я создала программу, которая будет вычислять выражение вида y=10 + (31*x − 5). Программа должна выводить выражение для вычисления, выводить запрос на ввод значений x и после этого вычислять выражение и выводить ответ на экран. (Рисунок 5.2)
+
+![Написание текста программы.](image/ris24.jpg){#fig:ris24.jpg width=0.7\textwidth}
+
+Текст программы:
+
+```nasm
+;--------------------------------
+; Программа вычисления выражения
+;--------------------------------
+%include 'in_out.asm' ; подключение внешнего файла
+SECTION .data
+div: DB 'Вычисление выражения y=10+(31*x-5)',0
+msg: DB 'Введите x',0
+rem: DB 'Результат',0
+SECTION .bss
+x: RESB 80
+SECTION .text
+GLOBAL _start
+_start:
+mov eax,div
+call sprintLF
+mov eax, msg
+call sprint
+mov ecx, x
+mov edx, 80
+call sread
+mov eax,x 
+call atoi
+mov ebx,31
+mul ebx
+add eax, -5
+add eax, 10
+mov ebx, eax
+mov eax, rem
+call sprint
+mov eax, ebx
+call iprintLF
+call quit
+```
+
+Далее я сделала этот файл исполняемым и запустила его, вводные данные я написала те, которые были в лекции. (Рисунок 5.3)
+
+
+![Создание исполняемого файла и запуск.](image/ris25.jpg){#fig:ris25.jpg width=0.7\textwidth}
+
+На экран вывелось число 98, я перепроверила все вручную, путем подстановки заданных x. Ответы совпали, это означает, что программа написана верно. 
+
+# Вывод.
+В ходе лабораторной работы я освоила арифметические инструкции языка ассемблера NASM и применила их на практике. 
